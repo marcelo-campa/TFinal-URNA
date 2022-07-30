@@ -32,7 +32,7 @@ define('DB_CHARSET', 'utf8');
 $rawdata = file_get_contents("php://input");
 // Let's say we got JSON
 $decoded = json_decode($rawdata);
-$insert = "insert into test (teste) values ( ".$decoded['id'] .")";
+$insert = "update candidatos set votos = votos +1 where id = ".$decoded->id;
 $result = DBExecute($insert);
 
 ?>

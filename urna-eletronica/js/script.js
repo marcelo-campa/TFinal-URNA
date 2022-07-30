@@ -27,14 +27,23 @@ politicos = {}
 arraycargos = []
 arraytamcargo = []
 
+//Funcao para resgatar dados do Banco
+function incrementaVotoCandidato(id) {
+  let url = 'js\\insert.php';
+  let request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+  request.send(JSON.stringify({id:id}));
+}
+
 
 //Funcao para inserir resultados da eleicao
-function ajax(id) {
+function incrementaVotoCandidato(id) {
   let url = 'js\\insert.php';
   let request = new XMLHttpRequest();
   request.open('POST', url, true);
-  request.setRequestHeader('Content-Type','application/json');
-  request.send({id:id});
+  request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+  request.send(JSON.stringify({id:id}));
 }
 
 //Seleciona cargos possíveis
@@ -47,11 +56,7 @@ for (i in input){
 console.log(arraycargos);
 
 comecarEtapa()
-// ajax('etapas.json', 'GET', (response) => {
-//   etapas = JSON.parse('[{"id":"1","cargo":"prefeito","numero_digitos":"2","nome":"Lindomar Pescador","partido":"PC do B","foto":"cp5.jpg","numero_voto":"65","nome_vice":"Malú","partido_vice":"PC do B","foto_vice":"v5.jpg"},{"id":"2","cargo":"vereador","numero_digitos":"5","nome":"Homero do Zé Filho","partido":"PSL","foto":"cv2.jpg","numero_voto":"55555","nome_vice":null,"partido_vice":null,"foto_vice":null},{"id":"3","cargo":"vereador","numero_digitos":"5","nome":"Dandor","partido":"PV","foto":"cv3.jpg","numero_voto":"43333","nome_vice":null,"partido_vice":null,"foto_vice":null},{"id":"4","cargo":"vereador","numero_digitos":"5","nome":"Filho","partido":"MDB","foto":"cv4.jpg","numero_voto":"15123","nome_vice":null,"partido_vice":null,"foto_vice":null},{"id":"5","cargo":"vereador","numero_digitos":"5","nome":"Joel Varão","partido":"PSDC","foto":"cv5.jpg","numero_voto":"27222","nome_vice":null,"partido_vice":null,"foto_vice":null},{"id":"6","cargo":"vereador","numero_digitos":"5","nome":"Professor Clebson Almeida","partido":"PSDB","foto":"cv6.jpg","numero_voto":"45000","nome_vice":null,"partido_vice":null,"foto_vice":null},{"id":"7","cargo":"prefeito","numero_digitos":"2","nome":"Chiquinho do Adbon","partido":"PDT","foto":"cp3.jpg","numero_voto":"12","nome_vice":"Arão","partido_vice":"PRP","foto_vice":"v3.jpg"},{"id":"8","cargo":"prefeito","numero_digitos":"2","nome":"Malrinete Gralhada","partido":"MDB","foto":"cp2.jpg","numero_voto":"15","nome_vice":"Biga","partido_vice":"MDB","foto_vice":"v2.jpg"},{"id":"9","cargo":"prefeito","numero_digitos":"2","nome":"Dr. Francisco","partido":"PSC","foto":"cp1.jpg","numero_voto":"45","nome_vice":"João Rodrigues","partido_vice":"PV","foto_vice":"v1.jpg"},{"id":"10","cargo":"prefeito","numero_digitos":"2","nome":"Zé Lopes","partido":"PPL","foto":"cp4.jpg","numero_voto":"54","nome_vice":"Francisca Ferreira Ramos","partido_vice":"PPL","foto_vice":"v4.jpg"},{"id":"11","cargo":"prefeito","numero_digitos":"2","nome":"Lindomar Pescador","partido":"PC do B","foto":"cp5.jpg","numero_voto":"65","nome_vice":"Malú","partido_vice":"PC do B","foto_vice":"v5.jpg"}]')
-//   console.log(etapas)
-//   comecarEtapa()
-// })
+
 
 window.onload = () => {
   let btns = document.querySelectorAll('.teclado--botao')
@@ -264,7 +269,7 @@ function confirmar() {
         'numero': numeroDigitado
       })
       console.log(candidato['id'])
-      ajax(candidato['id'])
+      incrementaVotoCandidato(candidato['id'])
       console.log(`Votou em ${numeroDigitado}`)
       //
     } else {
