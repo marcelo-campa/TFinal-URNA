@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <script src="js/util.js"></script>
-  <script src="js/script.js" defer></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/tela.css">
+  <script src="js/util.js"></script>
 </head>
 <body>
   <h1>Urna Eletrônica</h1>
@@ -43,7 +42,7 @@
 	}
 	
 
-  $sql = "SELECT id,cargo FROM candidatos";
+  $sql = "SELECT * FROM candidatos";
   $result = DBExecute($sql);
     if(!mysqli_num_rows($result))
     {
@@ -53,12 +52,30 @@
     {
         while ($res = mysqli_fetch_assoc($result))
         {
-			
-			printf("%d %s\n", $res["id"], $res["cargo"]);
             $data[] = $res;
         }
     }
+
+    $sql2 = "SELECT count(distinct cargo) as count FROM candidatos";
+    $result2 = DBExecute($sql2);
+      if(!mysqli_num_rows($result2))
+      {
+          return false;
+      }
+      else
+      {
+        
+          $res2 = mysqli_fetch_assoc($result2);
+          
+      }
+    $json = json_encode($data,JSON_UNESCAPED_UNICODE);
+    
+    echo '<script type="text/javascript">
+    IniciaUrna('.$json.','.$res2['count'].');
+    </script>';
   ?>
+
+<script type = "text/javascript" src="js/script.js" defer></script>
 
   <div class="urna-area">
     <div class="urna">
