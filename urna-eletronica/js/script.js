@@ -27,6 +27,17 @@ politicos = {}
 arraycargos = []
 arraytamcargo = []
 
+
+//Funcao para inserir resultados da eleicao
+function ajax(id) {
+  let url = 'js\\insert.php';
+  let request = new XMLHttpRequest();
+  request.open('POST', url, true);
+  request.setRequestHeader('Content-Type','application/json');
+  request.send({id:id});
+}
+
+//Seleciona cargos possíveis
 for (i in input){
   if (!arraycargos.includes(input[i]['cargo'])){
     arraycargos.push(input[i]['cargo'])
@@ -252,7 +263,10 @@ function confirmar() {
         'etapa': arraycargos[etapaAtual],
         'numero': numeroDigitado
       })
+      console.log(candidato['id'])
+      ajax(candidato['id'])
       console.log(`Votou em ${numeroDigitado}`)
+      //
     } else {
       // Votou nulo
       votos.push({
@@ -271,6 +285,8 @@ function confirmar() {
     etapaAtual++
   } else {
     console.log(votos)
+    //query insert votos
+
     document.querySelector('.tela').innerHTML = `
       <div class="fim">FIM</div>
     `
