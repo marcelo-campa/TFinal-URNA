@@ -21,15 +21,19 @@ var input
 var netapas
 
 input = candidatosRequest();
-console.log(etapas)
 netapas = ncargosRequest();
 console.log(netapas)
 politicos = {}
+arraycargos = []
+arraytamcargo = []
 
 for (i in input){
-  console.log(input[i]['cargo'])
-  politicos[input[i]['cargo']]
+  if (!arraycargos.includes(input[i]['cargo'])){
+    arraycargos.push(input[i]['cargo'])
+    arraytamcargo.push(input[i]['numero_digitos'])
+  }
 }
+console.log(arraycargos);
 
 comecarEtapa()
 // ajax('etapas.json', 'GET', (response) => {
@@ -56,8 +60,8 @@ window.onload = () => {
  */
 function comecarEtapa() {
 
-  let etapa = etapas[etapaAtual]
-  console.log('Etapa atual: ' + etapa['titulo'])
+  let etapa = etapaAtual
+  console.log('Etapa atual: ' + arraycargos[etapaAtual])
 
   numeroDigitado = ''
   votoEmBranco = false
@@ -74,14 +78,20 @@ function comecarEtapa() {
   rNomeVice.style.display = 'none'
   rRodape.style.display = 'none'
 
-  for (let i = 0; i < etapa['numeros']; i++) {
+  var piscateto 
+  for (i in input){
+    if (arraycargos[etapaAtual] == input[i]['cargo']){
+      piscateto = input[i]['numero_digitos']
+    }
+  }
+  console.log(piscateto)
+  for (let i = 0; i < piscateto; i++) {
     let pisca = i == 0 ? ' pisca' : ''
     numeros.innerHTML += `
       <div class="numero${pisca}"></div>
     `
   }
-
-  rCargo.innerHTML = etapa['titulo']
+  rCargo.innerHTML = arraycargos[etapaAtual]
 }
 
 /**
@@ -91,12 +101,18 @@ function comecarEtapa() {
 function atualizarInterface() {
   console.log('Número Digitado:', numeroDigitado)
 
-  let etapa = etapas[etapaAtual]
+  let etapa = etapaAtual
   let candidato = null
 
-  for (let num in etapa['candidatos']) {
-    if (num == numeroDigitado) {
-      candidato = etapa['candidatos'][num]
+  // for (let num in etapa['candidatos']) {
+  //   if (num == numeroDigitado) {
+  //     candidato = etapa['candidatos'][num]
+  //     break
+  //   }
+  // }
+  for (i in input){
+    if (numeroDigitado == input[i]['numero_voto']){
+      candidato = input[i]
       break
     }
   }
@@ -109,7 +125,7 @@ function atualizarInterface() {
   rPartidoPolitico.style.display = 'block'
 
   if (candidato) {
-    let vice = candidato['vice']
+    let vice = candidato['nome_vice']
 
     rRodape.style.display = 'block'
     rNomeCandidato.querySelector('span').innerHTML = candidato['nome']
@@ -117,13 +133,13 @@ function atualizarInterface() {
 
     rCandidato.style.display = 'block'
     rCandidato.querySelector('.imagem img').src = `img/${candidato['foto']}`
-    rCandidato.querySelector('.cargo p').innerHTML = etapa['titulo']
+    rCandidato.querySelector('.cargo p').innerHTML = candidato['cargo']
     
     if (vice) {
       rNomeVice.style.display = 'block'
-      rNomeVice.querySelector('span').innerHTML = vice['nome']
+      rNomeVice.querySelector('span').innerHTML = candidato['nome_vice']
       rVice.style.display = 'block'
-      rVice.querySelector('.imagem img').src = `img/${vice['foto']}`
+      rVice.querySelector('.imagem img').src = `img/${candidato['foto_vice']}`
     } else {
       rNomeVice.style.display = 'none'
     }
@@ -203,41 +219,58 @@ function corrigir() {
  */
 function confirmar() {
   console.log('confirmar')
+  if (arraytamcargo[etapaAtual] != numeroDigitado.length){
+    return
+  }
 
-  let etapa = etapas[etapaAtual]
-
-  if (numeroDigitado.length == etapa['numeros']) {
-    if (etapa['candidatos'][numeroDigitado]) {
+  let etapa = etapaAtual
+  let candidato 
+  for (i in input){
+    if (numeroDigitado== ''){
+      break
+    } 
+    if (numeroDigitado == input[i]['numero_voto'] && arraycargos[etapaAtual] == input[i]['cargo']){
+      candidato = input[i]
+      break
+    }
+  }
+  if (candidato != undefined && numeroDigitado.length != candidato['numero_voto'].length){
+    return
+  }
+  if (votoEmBranco) {
+    // Votou em branco
+      votos.push({
+        'etapa': arraycargos[etapaAtual],
+        'numero': ''
+      })
+      console.log('Votou em Branco')
+  }
+  else if (candidato == undefined || numeroDigitado.length == candidato['numero_voto'].length) {
+    if (candidato != undefined && numeroDigitado == candidato['numero_voto']) {
       // Votou em candidato
       votos.push({
-        'etapa': etapa['titulo'],
+        'etapa': arraycargos[etapaAtual],
         'numero': numeroDigitado
       })
       console.log(`Votou em ${numeroDigitado}`)
     } else {
       // Votou nulo
       votos.push({
-        'etapa': etapa['titulo'],
+        'etapa': arraycargos[etapaAtual],
         'numero': null
       })
       console.log('Votou Nulo')
     }
-  } else if (votoEmBranco) {
-    // Votou em branco
-      votos.push({
-        'etapa': etapa['titulo'],
-        'numero': ''
-      })
-      console.log('Votou em Branco')
   } else {
     // Voto não pode ser confirmado
     console.log('Voto não pode ser confirmado')
     return
   }
 
-  if (etapas[etapaAtual + 1]) {
+  if (arraycargos[etapaAtual + 1]) {
     etapaAtual++
   } else {
+    console.log(votos)
     document.querySelector('.tela').innerHTML = `
       <div class="fim">FIM</div>
     `

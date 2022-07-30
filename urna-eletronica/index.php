@@ -42,7 +42,7 @@
 	}
 	
 
-  $sql = "SELECT * FROM candidatos";
+  $sql = "SELECT * FROM candidatos order by id";
   $result = DBExecute($sql);
     if(!mysqli_num_rows($result))
     {
