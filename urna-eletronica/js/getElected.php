@@ -32,7 +32,15 @@ define('DB_CHARSET', 'utf8');
 $rawdata = file_get_contents("php://input");
 // Let's say we got JSON
 $decoded = json_decode($rawdata);
-$sql = "select c.nome as nome, c.cargo as cargo ,c.partido as partido ,c.nome_vice as nome_vice, max(c.votos) as total from candidatos c group by c.cargo";
+$sql = "select a.id as id, a.votos as total , a.nome as nome, a.cargo as cargo,
+a.partido as partido ,a.nome_vice as nome_vice,
+a.partido_vice as vice_partido
+from candidatos a
+inner join (
+select max(c.votos) as total, c.cargo as cargo from candidatos c
+group by c.cargo
+) b
+on a.votos = b.total and a.cargo = b.cargo";
 $result = DBExecute($sql);
 if(!mysqli_num_rows($result))
 {

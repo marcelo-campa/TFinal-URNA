@@ -46,9 +46,6 @@ function retrieveEleitos(){
   request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
   request.onreadystatechange = () => {
     if (request.readyState === 4 && request.status == "200") {
-        textResult = request.responseText
-        console.log(textResult)
-        document.getElementById("Resultados").innerHTML = request.responseText
         botaoResult(JSON.parse(request.responseText));
     }
   };
@@ -56,7 +53,20 @@ function retrieveEleitos(){
 }
 
 function botaoResult(jsonResult){
-  console.log(jsonResult);
+  var resultado = '<BR>';
+  var candidato;
+  console.log(jsonResult)
+  if(jsonResult.length > arraycargos.length){
+    resultado+= "Houve empate <BR>"
+  }
+  for(index in jsonResult){
+    candidato = jsonResult[index];
+    console.log(candidato);
+    resultado += candidato['cargo'].toUpperCase() + ": " + candidato['nome'] + ", do partido " + candidato['partido'];
+    resultado += candidato['nome_vice'] == null ? '' : ', de vice: ' + candidato['nome_vice'] + ' do partido ' + candidato['vice_partido'];
+    resultado += ' foi eleito com total de '+ candidato['total'] +' votos;<BR><BR>';
+  }
+  document.getElementById("Resultados").innerHTML = resultado;
 }
 
 //Seleciona cargos possíveis
@@ -215,7 +225,7 @@ function clicar(value) {
  */
 function branco() {
   console.log('branco')
-  
+  console.log(numeroDigitado)
   // Verifica se há algum número digitado,
   // se sim, não vota
   if (! numeroDigitado) {
@@ -246,7 +256,8 @@ function corrigir() {
  */
 function confirmar() {
   console.log('confirmar')
-  if (arraytamcargo[etapaAtual] != numeroDigitado.length){
+  if (arraytamcargo[etapaAtual] != numeroDigitado.length && !votoEmBranco){
+    console.log('oi')
     return
   }
   let candidato 
