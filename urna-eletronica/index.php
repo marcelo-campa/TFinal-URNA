@@ -158,8 +158,10 @@
             <div class="teclado--botao especial verde">Confirma</div>
           </div>
         </div>
+        <input type="button" value="Ver resultados parciais" style="float: right; margin-right: 40px; margin-top:15px" onclick="retrieveEleitos()">
       </div>
     </div>
   </div>
+  <H3 id = "Resultados" ><h3>
 </body>
 </html>

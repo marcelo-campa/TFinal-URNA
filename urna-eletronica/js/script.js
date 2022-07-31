@@ -27,15 +27,6 @@ politicos = {}
 arraycargos = []
 arraytamcargo = []
 
-//Funcao para resgatar dados do Banco
-function incrementaVotoCandidato(id) {
-  let url = 'js\\insert.php';
-  let request = new XMLHttpRequest();
-  request.open('GET', url, true);
-  request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
-  request.send(JSON.stringify({id:id}));
-}
-
 
 //Funcao para inserir resultados da eleicao
 function incrementaVotoCandidato(id) {
@@ -44,6 +35,28 @@ function incrementaVotoCandidato(id) {
   request.open('POST', url, true);
   request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
   request.send(JSON.stringify({id:id}));
+}
+
+
+//Funcao para mostrar resultados da eleicao
+function retrieveEleitos(){
+  let url = 'js\\getElected.php';
+  let request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+  request.onreadystatechange = () => {
+    if (request.readyState === 4 && request.status == "200") {
+        textResult = request.responseText
+        console.log(textResult)
+        document.getElementById("Resultados").innerHTML = request.responseText
+        botaoResult(JSON.parse(request.responseText));
+    }
+  };
+  request.send();
+}
+
+function botaoResult(jsonResult){
+  console.log(jsonResult);
 }
 
 //Seleciona cargos possíveis
@@ -116,8 +129,6 @@ function comecarEtapa() {
  */
 function atualizarInterface() {
   console.log('Número Digitado:', numeroDigitado)
-
-  let etapa = etapaAtual
   let candidato = null
 
   // for (let num in etapa['candidatos']) {
@@ -238,8 +249,6 @@ function confirmar() {
   if (arraytamcargo[etapaAtual] != numeroDigitado.length){
     return
   }
-
-  let etapa = etapaAtual
   let candidato 
   for (i in input){
     if (numeroDigitado== ''){
