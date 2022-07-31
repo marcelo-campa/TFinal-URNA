@@ -1,8 +1,8 @@
 <?php
-    define('DB_HOSTNAME', 'host.docker.internal');
-    define('DB_USERNAME', 'root');
-    define('DB_PASSWORD', '');
-    define('DB_DATABASE', 'eleicoes');
+    define('DB_HOSTNAME', getenv('HOST_MYSQL'));
+    define('DB_USERNAME', getenv('USER_MYSQL'));
+    define('DB_PASSWORD', getenv('PW_MYSQL'));
+    define('DB_DATABASE', getenv('DB_MYSQL'));
     define('DB_PREFIX', '');
     define('DB_CHARSET', 'utf8');
 
