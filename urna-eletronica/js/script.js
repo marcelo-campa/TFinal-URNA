@@ -11,34 +11,31 @@ const rRodape = document.querySelector('.tela .rodape')
 const rCandidato = document.querySelector('.direita .candidato')
 const rVice = document.querySelector('.direita .candidato.menor')
 
-const votos = []
-
+var votos = []
 var etapaAtual = 0
 var etapas = {}
 var numeroDigitado = ''
 var votoEmBranco = false
 var input
-var netapas
 
-input = candidatosRequest();
-netapas = ncargosRequest();
-console.log(netapas)
 politicos = {}
 arraycargos = []
 arraytamcargo = []
 
 
-//Funcao para inserir resultados da eleicao
+//Funcao que envia ao banco o candidato no qual a quantidade de votos deverá ser incrementada
 function incrementaVotoCandidato(id) {
   let url = 'js\\insert.php';
   let request = new XMLHttpRequest();
   request.open('POST', url, true);
   request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+  console.log('incrementando o id do candidato' + id);
   request.send(JSON.stringify({id:id}));
 }
 
 
-//Funcao para mostrar resultados da eleicao
+//Rquest que solicita ao backend os resultados da eleicao
+//Apos concluida chama a função que imprime na tela os resultados
 function retrieveEleitos(){
   let url = 'js\\getElected.php';
   let request = new XMLHttpRequest();
@@ -52,6 +49,7 @@ function retrieveEleitos(){
   request.send();
 }
 
+//Funcao responsavel por imprimir na tela os resultados da eleicao
 function botaoResult(jsonResult){
   var resultado = '<BR>';
   var candidato;
@@ -69,16 +67,40 @@ function botaoResult(jsonResult){
   document.getElementById("Resultados").innerHTML = resultado;
 }
 
+//Requisição que solicita ao backend a lista de todos os candidatos
+//E após completa chama as funções que iniciam a urna
+function retrieveCandidatos(){
+  let url = 'js\\getCandidatos.php';
+  let request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
+  request.onreadystatechange = () => {
+    if (request.readyState === 4 && request.status == "200") {
+      getCandidatos(request.responseText);
+    }
+  };
+  request.send();
+}
+
+//Popula o array de candidatos e começa as etapas da urna
+function getCandidatos(response){
+  input =  JSON.parse(response);
+  populaArrayCargos(input);
+  comecarEtapa()
+}
+
 //Seleciona cargos possíveis
-for (i in input){
-  if (!arraycargos.includes(input[i]['cargo'])){
-    arraycargos.push(input[i]['cargo'])
-    arraytamcargo.push(input[i]['numero_digitos'])
+function populaArrayCargos(allCandidatos){
+  for (i in allCandidatos){
+    if (!arraycargos.includes(allCandidatos[i]['cargo'])){
+      arraycargos.push(allCandidatos[i]['cargo'])
+      arraytamcargo.push(allCandidatos[i]['numero_digitos'])
+    }
   }
 }
-console.log(arraycargos);
 
-comecarEtapa()
+//Inicia a request que retorna os candidatos e inicia a urna
+retrieveCandidatos();
 
 
 window.onload = () => {
