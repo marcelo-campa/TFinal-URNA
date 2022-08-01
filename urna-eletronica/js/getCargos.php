@@ -1,5 +1,8 @@
 <?php
     include 'dbConnect.php';
+     /**
+     * Trecho para retornar quantidades de cargo por cargo
+     */  
     $sql2 = "SELECT count(distinct cargo) as count FROM candidatos";
     $result2 = DBExecute($sql2);
     if(!mysqli_num_rows($result2))
