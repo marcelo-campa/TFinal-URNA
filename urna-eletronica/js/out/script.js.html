@@ -1,4 +1,32 @@
-const rVotoPara = document.querySelector('.esquerda .rotulo.r1 span')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: script.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: script.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const rVotoPara = document.querySelector('.esquerda .rotulo.r1 span')
 const rCargo = document.querySelector('.esquerda .rotulo.r2 span')
 const numeros = document.querySelector('.esquerda .rotulo.r3')
 const rDescricao = document.querySelector('.esquerda .rotulo.r4')
@@ -52,7 +80,7 @@ function retrieveEleitos(){
   request.open('GET', url, true);
   request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
   request.onreadystatechange = () => {
-    if (request.readyState === 4 && request.status == "200") {
+    if (request.readyState === 4 &amp;&amp; request.status == "200") {
         botaoResult(JSON.parse(request.responseText));
     }
   };
@@ -66,18 +94,18 @@ function retrieveEleitos(){
  * recebe um json com os resultados da eleicao
  */
 function botaoResult(jsonResult){
-  var resultado = '<BR>';
+  var resultado = '&lt;BR>';
   var candidato;
   console.log(jsonResult)
   if(jsonResult.length > arraycargos.length){
-    resultado+= "Houve empate <BR>"
+    resultado+= "Houve empate &lt;BR>"
   }
   for(index in jsonResult){
     candidato = jsonResult[index];
     console.log(candidato);
     resultado += candidato['cargo'].toUpperCase() + ": " + candidato['nome'] + ", do partido " + candidato['partido'];
     resultado += candidato['nome_vice'] == null ? '' : ', de vice: ' + candidato['nome_vice'] + ' do partido ' + candidato['vice_partido'];
-    resultado += ' foi eleito com total de '+ candidato['total'] +' votos;<BR><BR>';
+    resultado += ' foi eleito com total de '+ candidato['total'] +' votos;&lt;BR>&lt;BR>';
   }
   document.getElementById("Resultados").innerHTML = resultado;
 }
@@ -92,7 +120,7 @@ function retrieveCandidatos(){
   request.open('GET', url, true);
   request.setRequestHeader('Content-Type','application/json;charset=UTF-8');
   request.onreadystatechange = () => {
-    if (request.readyState === 4 && request.status == "200") {
+    if (request.readyState === 4 &amp;&amp; request.status == "200") {
       getCandidatos(request.responseText);
     }
   };
@@ -163,10 +191,10 @@ function comecarEtapa() {
     }
   }
   console.log(piscateto)
-  for (let i = 0; i < piscateto; i++) {
+  for (let i = 0; i &lt; piscateto; i++) {
     let pisca = i == 0 ? ' pisca' : ''
     numeros.innerHTML += `
-      <div class="numero${pisca}"></div>
+      &lt;div class="numero${pisca}">&lt;/div>
     `
   }
   rCargo.innerHTML = arraycargos[etapaAtual]
@@ -242,7 +270,7 @@ function clicar(value) {
   console.log(value)
 
   let elNum = document.querySelector('.esquerda .rotulo.r3 .numero.pisca')
-  if (elNum && ! votoEmBranco) {
+  if (elNum &amp;&amp; ! votoEmBranco) {
     numeroDigitado += (value)
     elNum.innerHTML = value
     elNum.classList.remove('pisca')
@@ -295,7 +323,7 @@ function corrigir() {
  */
 function confirmar() {
   console.log('confirmar')
-  if (arraytamcargo[etapaAtual] != numeroDigitado.length && !votoEmBranco){
+  if (arraytamcargo[etapaAtual] != numeroDigitado.length &amp;&amp; !votoEmBranco){
     console.log('oi')
     return
   }
@@ -304,12 +332,12 @@ function confirmar() {
     if (numeroDigitado== ''){
       break
     } 
-    if (numeroDigitado == input[i]['numero_voto'] && arraycargos[etapaAtual] == input[i]['cargo']){
+    if (numeroDigitado == input[i]['numero_voto'] &amp;&amp; arraycargos[etapaAtual] == input[i]['cargo']){
       candidato = input[i]
       break
     }
   }
-  if (candidato != undefined && numeroDigitado.length != candidato['numero_voto'].length){
+  if (candidato != undefined &amp;&amp; numeroDigitado.length != candidato['numero_voto'].length){
     return
   }
   if (votoEmBranco) {
@@ -321,7 +349,7 @@ function confirmar() {
       console.log('Votou em Branco')
   }
   else if (candidato == undefined || numeroDigitado.length == candidato['numero_voto'].length) {
-    if (candidato != undefined && numeroDigitado == candidato['numero_voto']) {
+    if (candidato != undefined &amp;&amp; numeroDigitado == candidato['numero_voto']) {
       // Votou em candidato
       votos.push({
         'etapa': arraycargos[etapaAtual],
@@ -352,10 +380,32 @@ function confirmar() {
     //query insert votos
 
     document.querySelector('.tela').innerHTML = `
-      <div class="fim">FIM</div>
+      &lt;div class="fim">FIM&lt;/div>
     `
   }
 
   (new Audio('audio/se3.mp3')).play()
   comecarEtapa()
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#arraycargos">arraycargos</a></li><li><a href="global.html#atualizarInterface">atualizarInterface</a></li><li><a href="global.html#botaoResult">botaoResult</a></li><li><a href="global.html#branco">branco</a></li><li><a href="global.html#clicar">clicar</a></li><li><a href="global.html#comecarEtapa">comecarEtapa</a></li><li><a href="global.html#confirmar">confirmar</a></li><li><a href="global.html#corrigir">corrigir</a></li><li><a href="global.html#incrementaVotoCandidato">incrementaVotoCandidato</a></li><li><a href="global.html#politicos">politicos</a></li><li><a href="global.html#retrieveCandidatos">retrieveCandidatos</a></li><li><a href="global.html#retrieveEleitos">retrieveEleitos</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Jul 31 2022 23:43:15 GMT-0300 (Horário Padrão de Brasília)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
