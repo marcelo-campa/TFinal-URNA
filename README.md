@@ -1,6 +1,6 @@
 # Urna Eletrônica
 
-Um simulador da urna eletrônica brasileira.
+Um simulador da urna eletrônica brasileira com adição de um botão para verificar o resultado parcial das eleições.
 
 ### [https://aqueous-tor-60129.herokuapp.com/)
 ![Urna Eletrônica](urna-eletronica/screenshot.jpg)
