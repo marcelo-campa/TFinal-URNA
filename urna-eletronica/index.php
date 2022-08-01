@@ -6,7 +6,7 @@
   <title>Document</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/tela.css">
-  <script src="js/util.js"></script>
+  <link rel="shortcut icon" href="#">
   <script type = "text/javascript" src="js/script.js" defer></script>
 </head>
 <body>

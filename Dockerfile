@@ -16,4 +16,4 @@ ENV PW_MYSQL=${pw}
 ARG db
 ENV DB_MYSQL=${db}
 
-EXPOSE 80 443
+COPY ports.conf /etc/apache2/ports.conf
